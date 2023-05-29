@@ -1,18 +1,11 @@
 package fr.diginamic.recensement;
 
-import java.util.Scanner;
-
 import fr.diginamic.recensement.entites.Recensement;
-import fr.diginamic.recensement.services.RechercheDepartementsPlusPeuplees;
-import fr.diginamic.recensement.services.RecherchePopulationBorneService;
-import fr.diginamic.recensement.services.RecherchePopulationDepartementService;
-import fr.diginamic.recensement.services.RecherchePopulationRegionService;
-import fr.diginamic.recensement.services.RecherchePopulationVilleService;
-import fr.diginamic.recensement.services.RechercheRegionsPlusPeuplees;
-import fr.diginamic.recensement.services.RechercheVillesPlusPeupleesDepartement;
-import fr.diginamic.recensement.services.RechercheVillesPlusPeupleesFrance;
-import fr.diginamic.recensement.services.RechercheVillesPlusPeupleesRegion;
+import fr.diginamic.recensement.exceptions.*;
+import fr.diginamic.recensement.services.*;
 import fr.diginamic.recensement.utils.RecensementUtils;
+
+import java.util.Scanner;
 
 /**
  * Application de traitement des données de recensement de population
@@ -26,7 +19,7 @@ public class Application {
 	 * 
 	 * @param args arguments (non utilisés ici)
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws allExceptions, maxIntException, minIntException, minMaxComp, unknownDpt {
 		Scanner scanner = new Scanner(System.in);
 
 		String filePath = ClassLoader.getSystemClassLoader().getResource("recensement.csv").getFile();
@@ -40,59 +33,62 @@ public class Application {
 		// Menu
 		int choix = 0;
 		do {
+			try {
+				// Affichage du menu
+				afficherMenu();
 
-			// Affichage du menu
-			afficherMenu();
+				// Poser une question à l'utilisateur
+				String choixMenu = scanner.nextLine();
 
-			// Poser une question à l'utilisateur
-			String choixMenu = scanner.nextLine();
+				// Conversion du choix utilisateur en int
+				choix = Integer.parseInt(choixMenu);
 
-			// Conversion du choix utilisateur en int
-			choix = Integer.parseInt(choixMenu);
-
-			// On exécute l'option correspondant au choix de l'utilisateur
-			switch (choix) {
-			case 1:
-				RecherchePopulationVilleService rechercheVille = new RecherchePopulationVilleService();
-				rechercheVille.traiter(recensement, scanner);
-				break;
-			case 2:
-				RecherchePopulationDepartementService rechercheDept = new RecherchePopulationDepartementService();
-				rechercheDept.traiter(recensement, scanner);
-				break;
-			case 3:
-				RecherchePopulationRegionService rechercheRegion = new RecherchePopulationRegionService();
-				rechercheRegion.traiter(recensement, scanner);
-				break;
-			case 4:
-				RecherchePopulationBorneService recherchePopBorne = new RecherchePopulationBorneService();
-				recherchePopBorne.traiter(recensement, scanner);
-				break;
-			case 5:
-				RechercheVillesPlusPeupleesDepartement rechercheVillesPlusPeupleesDepartement = new RechercheVillesPlusPeupleesDepartement();
-				rechercheVillesPlusPeupleesDepartement.traiter(recensement, scanner);
-				break;
-			case 6:
-				RechercheVillesPlusPeupleesRegion rechercheVillesPlusPeupleesRegion = new RechercheVillesPlusPeupleesRegion();
-				rechercheVillesPlusPeupleesRegion.traiter(recensement, scanner);
-				break;
-			case 7:
-				RechercheDepartementsPlusPeuplees rechercherDepartementsPlusPeuplees = new RechercheDepartementsPlusPeuplees();
-				rechercherDepartementsPlusPeuplees.traiter(recensement, scanner);
-				break;
-			case 8:
-				RechercheRegionsPlusPeuplees rechercheRegionsPlusPeuplees = new RechercheRegionsPlusPeuplees();
-				rechercheRegionsPlusPeuplees.traiter(recensement, scanner);
-				break;
-			case 9:
-				RechercheVillesPlusPeupleesFrance rechercheVillesPlusPeupleesFrance = new RechercheVillesPlusPeupleesFrance();
-				rechercheVillesPlusPeupleesFrance.traiter(recensement, scanner);
-				break;
+				// On exécute l'option correspondant au choix de l'utilisateur
+				switch (choix) {
+					case 1:
+						RecherchePopulationVilleService rechercheVille = new RecherchePopulationVilleService();
+						rechercheVille.traiter(recensement, scanner);
+						break;
+					case 2:
+						RecherchePopulationDepartementService rechercheDept = new RecherchePopulationDepartementService();
+						rechercheDept.traiter(recensement, scanner);
+						break;
+					case 3:
+						RecherchePopulationRegionService rechercheRegion = new RecherchePopulationRegionService();
+						rechercheRegion.traiter(recensement, scanner);
+						break;
+					case 4:
+						RecherchePopulationBorneService recherchePopBorne = new RecherchePopulationBorneService();
+						recherchePopBorne.traiter(recensement, scanner);
+						break;
+					case 5:
+						RechercheVillesPlusPeupleesDepartement rechercheVillesPlusPeupleesDepartement = new RechercheVillesPlusPeupleesDepartement();
+						rechercheVillesPlusPeupleesDepartement.traiter(recensement, scanner);
+						break;
+					case 6:
+						RechercheVillesPlusPeupleesRegion rechercheVillesPlusPeupleesRegion = new RechercheVillesPlusPeupleesRegion();
+						rechercheVillesPlusPeupleesRegion.traiter(recensement, scanner);
+						break;
+					case 7:
+						RechercheDepartementsPlusPeuplees rechercherDepartementsPlusPeuplees = new RechercheDepartementsPlusPeuplees();
+						rechercherDepartementsPlusPeuplees.traiter(recensement, scanner);
+						break;
+					case 8:
+						RechercheRegionsPlusPeuplees rechercheRegionsPlusPeuplees = new RechercheRegionsPlusPeuplees();
+						rechercheRegionsPlusPeuplees.traiter(recensement, scanner);
+						break;
+					case 9:
+						RechercheVillesPlusPeupleesFrance rechercheVillesPlusPeupleesFrance = new RechercheVillesPlusPeupleesFrance();
+						rechercheVillesPlusPeupleesFrance.traiter(recensement, scanner);
+						break;
+				}
 			}
+			catch(allExceptions exception) {
+				System.out.println(exception.getMessage());
+			}
+		} while (choix != 99) ;
 
-		} while (choix != 99);
-
-		scanner.close();
+			scanner.close();
 
 	}
 

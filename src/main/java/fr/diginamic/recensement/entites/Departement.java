@@ -24,7 +24,8 @@ public class Departement implements EnsemblePop {
 		super();
 		this.code = code;
 	}
-	
+
+
 	/** Ajoute une ville
 	 * @param ville ville
 	 */
